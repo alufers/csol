@@ -46,8 +46,12 @@ std::string TokenTypeUtils::getTokenTypeName(TokenType tt) {
     return "T_LESS_EQUAL";
   case TokenType::T_PLUS_PLUS:
     return "T_PLUS_PLUS";
+  case TokenType::T_PLUS_EQUAL:
+    return "T_PLUS_EQUAL";
   case TokenType::T_MINUS_MINUS:
     return "T_MINUS_MINUS";
+  case TokenType::T_MINUS_EQUAL:
+    return "T_MINUS_EQUAL";
   case TokenType::T_IDENTIFIER:
     return "T_IDENTIFIER";
   case TokenType::T_STRING:

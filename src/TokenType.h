@@ -1,5 +1,5 @@
 #ifndef TOKEN_TYPE_H
-#define TOKEN_TYPE
+#define TOKEN_TYPE_H
 #include <string>
 
 enum class TokenType {
@@ -25,7 +25,9 @@ enum class TokenType {
   T_LESS,
   T_LESS_EQUAL,
   T_PLUS_PLUS,
+  T_PLUS_EQUAL,
   T_MINUS_MINUS,
+  T_MINUS_EQUAL,
 
   // Literals.
   T_IDENTIFIER,
@@ -55,6 +57,7 @@ enum class TokenType {
 };
 
 class TokenTypeUtils {
-    static std::string getTokenTypeName(TokenType tt);
+public:
+  static std::string getTokenTypeName(TokenType tt);
 };
 #endif
