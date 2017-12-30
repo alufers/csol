@@ -1,10 +1,12 @@
-#include <iostream>
-#include <termcolor.hpp>
-#include <memory>
-#include "SourceFile.h"
 #include "ErrorReporter.h"
+#include "Expr.h"
 #include "Scanner.h"
+#include "SourceFile.h"
+#include "Stmt.h"
 #include "TokenType.h"
+#include <iostream>
+#include <memory>
+#include <termcolor.hpp>
 
 int main(int argc, char **argv) {
   if (argc <= 1) {
@@ -14,13 +16,14 @@ int main(int argc, char **argv) {
     std::cout << "Usage: \n";
     std::cout << "    sol <filename>\n";
   } else {
-  
+
     auto er = std::make_shared<ErrorReporter>();
     auto sf = std::make_shared<SourceFile>(argv[1]);
-    Scanner s = Scanner(er, sf);
-    s.scan();
-    for(auto &t : s.tokens) {
-      //std::cout << TokenTypeUtils::getTokenTypeName(t.type) << " " << t.lexeme << "\n";
+    sf->scanner = std::make_shared<Scanner>(er, sf);
+    sf->scanner->scan();
+    for (auto &t : sf->scanner->tokens) {
+      std::cout << TokenTypeUtils::getTokenTypeName(t.type) << " " << t.lexeme
+                << "\n";
     }
   }
 }

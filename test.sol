@@ -1,6 +1,5 @@
-+20-10+8
-+
--
-0
-98
-dupa
+mut dupa = 999;
+dupa++;
+if(dupa == 1000) {
+    print "tysiac";
+}

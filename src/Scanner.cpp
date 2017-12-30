@@ -5,10 +5,14 @@ Scanner::Scanner(std::shared_ptr<ErrorReporter> errorReporter,
   this->errorReporter = errorReporter;
   this->startLocation = CodeLocation(fileToScan, 0, 0, 0);
   this->currentLocation = CodeLocation(fileToScan, 0, 0, 0);
-  this->scannedFile = fileToScan;
+  this->boundFile = fileToScan;
 }
 
 void Scanner::scan() {
+  this->scannedFile = this->boundFile.lock();
+  if(!this->scannedFile) {
+    throw std::runtime_error("File to scan is deleted (could not lock weak_ptr).");
+  }
   while (!this->isAtEnd()) {
     this->startLocation = this->currentLocation;
     this->scanToken();
@@ -16,6 +20,7 @@ void Scanner::scan() {
       break;
     }
   }
+  this->scannedFile = nullptr;
 }
 
 void Scanner::scanToken() {
@@ -98,9 +103,14 @@ void Scanner::scanToken() {
   case ' ':
     /// :(
     break;
+  case '"':
+    this->consumeStringLiteral();
+    break;
   default:
     if (this->isNumeric(c)) {
       this->consumeNumberLiteral();
+    } else if (this->isAlpha(c)) {
+      this->consumeIdentifierOrKeyword();
     } else {
       this->errorReporter->reportScanningError(
           "Unexpected character " + std::string(1, c), this->currentLocation);
@@ -117,9 +127,55 @@ void Scanner::consumeNumberLiteral() {
   }
   this->addToken(TokenType::T_NUMBER, std::stod(this->currentLexeme()));
 }
+void Scanner::consumeStringLiteral() {
+  std::ostringstream literalStream;
+  while (this->peek() != '"' && !this->isAtEnd()) {
+    char c = this->advance();
+    if (c == '\\') {          // match escape sequences
+      if (this->match('"')) { //  \"
+        literalStream << '"';
+      } else if (this->match('\\')) { // \\  
+        literalStream << '\\';
+      } else if (this->match('n')) {  // new line
+        literalStream << '\n';
+      } else if (this->match('t')) { // tabulator
+        literalStream << '\t';
+      } else if (this->match('\n')) {
+        // do nothing, escaped newline
+      } else {
+        this->errorReporter->reportScanningError("Illegal escape sequence \\" +
+                                                     std::string(1, c),
+                                                 this->currentLocation);
+        return;
+      }
+    } else {
+      literalStream << c;
+    }
+  }
+  if (this->isAtEnd()) {
+    this->errorReporter->reportScanningError("Unterminated string",
+                                             this->startLocation);
+    return;
+  }
+  this->advance(); // move past "
+  addToken(TokenType::T_STRING, literalStream.str());
+}
 std::string Scanner::currentLexeme() {
   return this->scannedFile->contents.substr(this->startLocation.charOffset,
-                                            this->currentLocation.charOffset - this->startLocation.charOffset);
+                                            this->currentLocation.charOffset -
+                                                this->startLocation.charOffset);
+}
+void Scanner::consumeIdentifierOrKeyword() {
+  while (this->isAlphaNumeric(peek()) && !this->isAtEnd()) {
+    this->advance();
+  }
+  std::string value = this->currentLexeme();
+  TokenType tt = TokenTypeUtils::stringToKeyword(value);
+  if (tt == TokenType::T_IDENTIFIER) {
+    this->addToken(TokenType::T_IDENTIFIER, value);
+  } else {
+    this->addToken(tt);
+  }
 }
 void Scanner::addToken(TokenType type,
                        mpark::variant<double, std::string, bool> literalValue) {

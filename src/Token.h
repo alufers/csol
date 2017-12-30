@@ -5,7 +5,7 @@
 #include <string>
 #include <mpark/variant.hpp>
 
-
+class CodeLocation;
 class Token {
 public:
   CodeLocation location;

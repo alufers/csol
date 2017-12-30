@@ -96,3 +96,69 @@ std::string TokenTypeUtils::getTokenTypeName(TokenType tt) {
     return "T_EOF";
   }
 }
+
+TokenType TokenTypeUtils::stringToKeyword(const std::string &value) {
+
+  if (value == "and") {
+    return TokenType::T_AND;
+  } else if (value == "class") {
+    return TokenType::T_CLASS;
+  } else if (value == "else") {
+    return TokenType::T_ELSE;
+  } else if (value == "false") {
+    return TokenType::T_FALSE;
+  } else if (value == "fun") {
+    return TokenType::T_FUN;
+  } else if (value == "for") {
+    return TokenType::T_FOR;
+  } else if (value == "if") {
+    return TokenType::T_IF;
+  } else if (value == "nil") {
+    return TokenType::T_NIL;
+  } else if (value == "or") {
+    return TokenType::T_OR;
+  } else if (value == "print") {
+    return TokenType::T_PRINT;
+  } else if (value == "return") {
+    return TokenType::T_RETURN;
+  } else if (value == "break") {
+    return TokenType::T_BREAK;
+  } else if (value == "super") {
+    return TokenType::T_SUPER;
+  } else if (value == "this") {
+    return TokenType::T_THIS;
+  } else if (value == "true") {
+    return TokenType::T_TRUE;
+  } else if (value == "mut") {
+    return TokenType::T_MUT;
+  } else if (value == "while") {
+    return TokenType::T_WHILE;
+  } else {
+    return TokenType::T_IDENTIFIER;
+  }
+}
+
+bool TokenTypeUtils::isKeyword(const TokenType &tt) {
+  switch (tt) {
+  case TokenType::T_AND:
+  case TokenType::T_CLASS:
+  case TokenType::T_ELSE:
+  case TokenType::T_FALSE:
+  case TokenType::T_FUN:
+  case TokenType::T_FOR:
+  case TokenType::T_IF:
+  case TokenType::T_NIL:
+  case TokenType::T_OR:
+  case TokenType::T_PRINT:
+  case TokenType::T_RETURN:
+  case TokenType::T_BREAK:
+  case TokenType::T_SUPER:
+  case TokenType::T_THIS:
+  case TokenType::T_TRUE:
+  case TokenType::T_MUT:
+  case TokenType::T_WHILE:
+    return true;
+  default:
+    return false;
+  }
+}

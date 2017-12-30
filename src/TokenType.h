@@ -59,5 +59,7 @@ enum class TokenType {
 class TokenTypeUtils {
 public:
   static std::string getTokenTypeName(TokenType tt);
+  static TokenType stringToKeyword(const std::string &value);
+  static bool isKeyword(const TokenType &tt);
 };
 #endif
