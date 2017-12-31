@@ -4,11 +4,12 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Expr.h"
 
 class StmtVisitor;
 class Stmt {
 public:
-  virtual void accept(StmtVisitor &visitor);
+  virtual void accept(StmtVisitor &visitor) = 0;
 };
 
 class StmtBlock;
@@ -37,7 +38,8 @@ public:
 
 class StmtBlock : public Stmt {
 public:
-  std::vector<Stmt> statements;
+  StmtBlock() {}
+  std::vector<std::unique_ptr<Stmt>> statements;
   void accept(StmtVisitor &visitor) { visitor.visitBlockStmt(*this); }
 };
 
@@ -50,6 +52,7 @@ public:
 
 class StmtExpression : public Stmt {
 public:
+  std::unique_ptr<Expr> expression;
   void accept(StmtVisitor &visitor) { visitor.visitExpressionStmt(*this); }
 };
 
@@ -57,13 +60,13 @@ class StmtFunction : public Stmt {
 public:
   Token name;
   std::vector<Token> parameters;
-  Stmt body;
+  std::unique_ptr<Stmt> body;
   void accept(StmtVisitor &visitor) { visitor.visitFunctionStmt(*this); }
 };
 
 class StmtIf : public Stmt {
 public:
-  // Expr condition;
+  std::unique_ptr<Expr> condition;
   std::unique_ptr<Stmt> thenBranch;
   std::unique_ptr<Stmt> elseBranch;
   void accept(StmtVisitor &visitor) { visitor.visitIfStmt(*this); }
@@ -72,7 +75,7 @@ public:
 class StmtReturn : public Stmt {
 public:
   Token keyword;
-  //std::unique_ptr<Expr> value;
+   std::unique_ptr<Expr> value;
   void accept(StmtVisitor &visitor) { visitor.visitReturnStmt(*this); }
 };
 
@@ -85,21 +88,23 @@ public:
 class StmtMutDeclaration : public Stmt {
 public:
   Token name;
-  //std::unique_ptr<Expr> initializer;
+  std::unique_ptr<Expr> initializer;
   void accept(StmtVisitor &visitor) { visitor.visitMutDeclarationStmt(*this); }
 };
 
 class StmtConstDeclaration : public Stmt {
 public:
   Token name;
-  //std::unique_ptr<Expr> initializer;
-  void accept(StmtVisitor &visitor) { visitor.visitConstDeclarationStmt(*this); }
+  std::unique_ptr<Expr> initializer;
+  void accept(StmtVisitor &visitor) {
+    visitor.visitConstDeclarationStmt(*this);
+  }
 };
 
 class StmtWhile : public Stmt {
 public:
-  //Expr condition;
-  Stmt body;
+  std::unique_ptr<Expr> condition;
+  std::unique_ptr<Stmt> body;
   void accept(StmtVisitor &visitor) { visitor.visitWhileStmt(*this); }
 };
 

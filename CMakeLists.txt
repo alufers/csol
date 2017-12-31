@@ -10,6 +10,7 @@ add_executable(sol
     src/CodeLocation.cpp
     src/Scanner.cpp
     src/SourceFile.cpp
+    src/Parser.cpp
 )
 include_directories( 
     external/

@@ -10,8 +10,9 @@ Scanner::Scanner(std::shared_ptr<ErrorReporter> errorReporter,
 
 void Scanner::scan() {
   this->scannedFile = this->boundFile.lock();
-  if(!this->scannedFile) {
-    throw std::runtime_error("File to scan is deleted (could not lock weak_ptr).");
+  if (!this->scannedFile) {
+    throw std::runtime_error(
+        "File to scan is deleted (could not lock weak_ptr).");
   }
   while (!this->isAtEnd()) {
     this->startLocation = this->currentLocation;
@@ -20,6 +21,7 @@ void Scanner::scan() {
       break;
     }
   }
+  this->addToken(TokenType::T_EOF);
   this->scannedFile = nullptr;
 }
 

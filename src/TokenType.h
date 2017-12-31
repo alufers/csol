@@ -51,6 +51,7 @@ enum class TokenType {
   T_THIS,
   T_TRUE,
   T_MUT,
+  T_CONST,
   T_WHILE,
 
   T_EOF

@@ -90,6 +90,8 @@ std::string TokenTypeUtils::getTokenTypeName(TokenType tt) {
     return "T_TRUE";
   case TokenType::T_MUT:
     return "T_MUT";
+  case TokenType::T_CONST:
+    return "T_CONST";
   case TokenType::T_WHILE:
     return "T_WHILE";
   case TokenType::T_EOF:
@@ -131,6 +133,8 @@ TokenType TokenTypeUtils::stringToKeyword(const std::string &value) {
     return TokenType::T_TRUE;
   } else if (value == "mut") {
     return TokenType::T_MUT;
+  } else if (value == "const") {
+    return TokenType::T_CONST;
   } else if (value == "while") {
     return TokenType::T_WHILE;
   } else {
@@ -156,6 +160,7 @@ bool TokenTypeUtils::isKeyword(const TokenType &tt) {
   case TokenType::T_THIS:
   case TokenType::T_TRUE:
   case TokenType::T_MUT:
+  case TokenType::T_CONST:
   case TokenType::T_WHILE:
     return true;
   default:
