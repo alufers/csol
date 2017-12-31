@@ -317,16 +317,20 @@ std::unique_ptr<Expr> Parser::primaryExpression() {
 
 // utility methods
 void Parser::doParse() {
+  try {
+    this->parsedFile = this->boundFile.lock();
+    if (!this->parsedFile) {
+      throw std::runtime_error(
+          "File to parse deleted (couldn't lock weak_ptr)");
+    }
 
-  this->parsedFile = this->boundFile.lock();
-  if (!this->parsedFile) {
-    throw std::runtime_error("File to parse deleted (couldn't lock weak_ptr)");
+    while (!this->isAtEnd()) {
+      this->root.statements.push_back(this->declaration());
+    }
+
+  } catch (ParseError e) {
+     std::cout << e.what() << std::endl;
   }
-
-  while (!this->isAtEnd()) {
-    // this->root.statements.push_back(this->declaration());
-  }
-
   this->parsedFile = nullptr;
 }
 
