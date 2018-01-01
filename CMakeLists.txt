@@ -11,6 +11,7 @@ add_executable(sol
     src/Scanner.cpp
     src/SourceFile.cpp
     src/Parser.cpp
+    src/AstPrinter.cpp
 )
 include_directories( 
     external/

@@ -25,18 +25,18 @@ class ExprVariable;
 class ExprPostfix;
 class ExprVisitor {
 public:
-  virtual void visitAssignExpr(const ExprAssign &expr);
-  virtual void visitBinaryExpr(const ExprBinary &expr);
-  virtual void visitCallExpr(const ExprCall &expr);
-  virtual void visitGetExpr(const ExprGet &expr);
-  virtual void visitGroupingExpr(const ExprGrouping &expr);
-  virtual void visitLiteralExpr(const ExprLiteral &expr);
-  virtual void visitSetExpr(const ExprSet &expr);
-  virtual void visitSuperExpr(const ExprSuper &expr);
-  virtual void visitThisExpr(const ExprThis &expr);
-  virtual void visitUnaryExpr(const ExprUnary &expr);
-  virtual void visitVariableExpr(const ExprVariable &expr);
-  virtual void visitPostfixExpr(const ExprPostfix &expr);
+  virtual void visitAssignExpr(ExprAssign &expr) = 0;
+  virtual void visitBinaryExpr(ExprBinary &expr) = 0;
+  virtual void visitCallExpr(ExprCall &expr) = 0;
+  virtual void visitGetExpr(ExprGet &expr) = 0;
+  virtual void visitGroupingExpr(ExprGrouping &expr) = 0;
+  virtual void visitLiteralExpr(ExprLiteral &expr) = 0;
+  virtual void visitSetExpr(ExprSet &expr) = 0;
+  virtual void visitSuperExpr(ExprSuper &expr) = 0;
+  virtual void visitThisExpr(ExprThis &expr) = 0;
+  virtual void visitUnaryExpr(ExprUnary &expr) = 0;
+  virtual void visitVariableExpr(ExprVariable &expr) = 0;
+  virtual void visitPostfixExpr(ExprPostfix &expr) = 0;
 };
 
 class ExprAssign : public Expr {

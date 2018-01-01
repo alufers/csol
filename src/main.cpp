@@ -1,4 +1,5 @@
 #include "ErrorReporter.h"
+#include "AstPrinter.h"
 #include "Expr.h"
 #include "Parser.h"
 #include "Scanner.h"
@@ -8,6 +9,7 @@
 #include <iostream>
 #include <memory>
 #include <termcolor.hpp>
+#include "AstPrinter.h"
 
 int main(int argc, char **argv) {
   if (argc <= 1) {
@@ -28,6 +30,10 @@ int main(int argc, char **argv) {
     }*/
     auto parser = std::make_unique<Parser>(er, sf);
     parser->doParse();
-    std::cout << parser->root.statements.size() << std::endl;
+    //std::cout << parser->root.statements.size() << std::endl;
+    AstPrinter printer;
+    std::cout << "digraph SOL {\n";
+    printer.printStatement(parser->root);
+    std::cout << "}\n";
   }
 }

@@ -1,10 +1,10 @@
 #ifndef STMT_H
 #define STMT_H
+#include "Expr.h"
 #include "Token.h"
 #include <memory>
 #include <string>
 #include <vector>
-#include "Expr.h"
 
 class StmtVisitor;
 class Stmt {
@@ -24,16 +24,16 @@ class StmtConstDeclaration;
 class StmtWhile;
 class StmtVisitor {
 public:
-  virtual void visitBlockStmt(const StmtBlock &stmt);
-  virtual void visitClassStmt(const StmtClass &stmt);
-  virtual void visitExpressionStmt(const StmtExpression &stmt);
-  virtual void visitFunctionStmt(const StmtFunction &stmt);
-  virtual void visitIfStmt(const StmtIf &stmt);
-  virtual void visitReturnStmt(const StmtReturn &stmt);
-  virtual void visitBreakStmt(const StmtBreak &stmt);
-  virtual void visitMutDeclarationStmt(const StmtMutDeclaration &stmt);
-  virtual void visitConstDeclarationStmt(const StmtConstDeclaration &stmt);
-  virtual void visitWhileStmt(const StmtWhile &stmt);
+  virtual void visitBlockStmt(StmtBlock &stmt) = 0;
+  virtual void visitClassStmt(StmtClass &stmt) = 0;
+  virtual void visitExpressionStmt(StmtExpression &stmt) = 0;
+  virtual void visitFunctionStmt(StmtFunction &stmt) = 0;
+  virtual void visitIfStmt(StmtIf &stmt) = 0;
+  virtual void visitReturnStmt(StmtReturn &stmt) = 0;
+  virtual void visitBreakStmt(StmtBreak &stmt) = 0;
+  virtual void visitMutDeclarationStmt(StmtMutDeclaration &stmt) = 0;
+  virtual void visitConstDeclarationStmt(StmtConstDeclaration &stmt) = 0;
+  virtual void visitWhileStmt(StmtWhile &stmt) = 0;
 };
 
 class StmtBlock : public Stmt {
@@ -75,7 +75,7 @@ public:
 class StmtReturn : public Stmt {
 public:
   Token keyword;
-   std::unique_ptr<Expr> value;
+  std::unique_ptr<Expr> value;
   void accept(StmtVisitor &visitor) { visitor.visitReturnStmt(*this); }
 };
 
@@ -96,9 +96,7 @@ class StmtConstDeclaration : public Stmt {
 public:
   Token name;
   std::unique_ptr<Expr> initializer;
-  void accept(StmtVisitor &visitor) {
-    visitor.visitConstDeclarationStmt(*this);
-  }
+  void accept(StmtVisitor &visitor) { visitor.visitConstDeclarationStmt(*this); }
 };
 
 class StmtWhile : public Stmt {
